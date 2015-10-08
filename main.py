@@ -30,6 +30,7 @@ def silly_search(problem, stat):
 
         # Deal with statistics here
         stat.increment_node_count()
+        stat.increment_node_children_count(len(children))
 
 
 p = SearchProblem(KASPAR_CODE)
@@ -44,3 +45,4 @@ else:
     p.print_path(res)
     p.print_solution(res)
     print("Läbitud tippe " + str(stat.get_node_count()))
+    print("Hargnemistegur: ", stat.get_avg_node_children_count())
