@@ -23,8 +23,11 @@ def silly_search(problem):
 
 p = SearchProblem(131333)
 res = silly_search(p)
+print("\nLahendamata labürint")
+p.dump()
 if res is None:
     print("Not found")
 else:
+    print("\nLahendatud labürint")
     p.print_path(res)
     p.print_solution(res)
