@@ -30,6 +30,7 @@ def silly_search(problem, stat):
 
         # Deal with statistics here
         stat.increment_node_count()
+        stat.increment_node_depth(node.depth)
         stat.increment_node_children_count(len(children))
 
 
@@ -46,3 +47,5 @@ else:
     p.print_solution(res)
     print("Läbitud tippe " + str(stat.get_node_count()))
     print("Hargnemistegur: ", stat.get_avg_node_children_count())
+    print("Maksimaalne järjekorra pikkus: valmimisel")
+    print("Puu maksimaalne sügavus: ", stat.get_max_depth())

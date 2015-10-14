@@ -4,6 +4,7 @@ __author__ = 'kaspar'
 class Statistics:
     def __init__(self):
         self.node_count = 0
+        self.node_depth = 0
         self.node_children = {}
 
     # ================== NODE TOTAL COUNT ==================
@@ -23,3 +24,11 @@ class Statistics:
             total += v
 
         return total / self.node_count
+
+    # ================== Node max depth ==================
+    def increment_node_depth(self, depth):
+        if depth > self.node_depth:
+            self.node_depth = depth
+
+    def get_max_depth(self):
+        return self.node_depth
