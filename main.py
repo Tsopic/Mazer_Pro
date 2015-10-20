@@ -50,19 +50,18 @@ class Search():
             if problem.is_goal(node):
                 return node
 
-        #    route = lab2.h1(p, node);
-
-
             children = problem.expand(node) # children on list tyypi; [ node1, node2, .... ]
             for child in children:
+                # Deal with statistics here
+                stat.increment_node_count()
+
                 if child not in visited:
                     fringe.add_end(child)  # valime yhe ja paneme jrk ette
                     visited.add(child)
 
-            # Deal with statistics here
-            stat.increment_node_count()
-            stat.increment_node_depth(node.depth)
             stat.increment_node_children_count(len(children))
+            stat.increment_node_depth(node.depth)
+
 
 
 
@@ -72,17 +71,26 @@ p = lab2.SearchProblem(MARTIN_CODE)
 initial_state = p.start_node()
 stat = Statistics()
 stat2 = Statistics()
-#res = Search.silly_search(p, stat)
-res = Search.god_damn_search(p, stat)
+res = Search.silly_search(p, stat)
+res2 = Search.god_damn_search(p, stat2)
 print("\nLahendamata labürint")
 p.dump()
 if res is None:
     print("Not found")
 else:
-    print("\nLahendatud labürint")
+    print("\nLahendatud labürint 1")
     p.print_path(res)
     p.print_solution(res)
     print("Läbitud tippe " + str(stat.get_node_count()))
     print("Hargnemistegur: ", stat.get_avg_node_children_count())
     print("Maksimaalne järjekorra pikkus: valmimisel")
     print("Puu maksimaalne sügavus: ", stat.get_max_depth())
+
+    if res2 is not None:
+        print("\nLahendatud labürint 1")
+        p.print_path(res2)
+        p.print_solution(res2)
+        print("Läbitud tippe " + str(stat2.get_node_count()))
+        print("Hargnemistegur: ", stat2.get_avg_node_children_count())
+        print("Maksimaalne järjekorra pikkus: valmimisel")
+        print("Puu maksimaalne sügavus: ", stat2.get_max_depth())
