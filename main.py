@@ -1,42 +1,79 @@
 __author__ = 'Martin, Kaspar'
 
 import random
+import lab2
 
-from lab2 import SearchProblem, Fringe
 from statistics import Statistics
 
 KASPAR_CODE = 131333
-MARTIN_CODE = 666
+MARTIN_CODE = 131316
 STEN_CODE = 111
 
+class Search():
+    def silly_search(problem, stat):
+        fringe = lab2.Fringe()
+        fringe.add_front(problem.start_node())
 
-def silly_search(problem, stat):
-    fringe = Fringe()
-    fringe.add_front(problem.start_node())
+        while 1:  # lõputu tsükkel
+            # Solution missing for the maze
+            if fringe.is_empty():
+                return None
 
-    while 1:  # lõputu tsükkel
-        # Solution missing for the maze
-        if fringe.is_empty():
-            return None
+            node = fringe.remove_front()
 
-        node = fringe.remove_front()
+            # Solution found
+            if problem.is_goal(node):
+                return node
 
-        # Solution found
-        if problem.is_goal(node):
-            return node
+            children = problem.expand(node)  # children on list tyypi; [ node1, node2, .... ]
+            fringe.add_front(random.choice(children))  # valime yhe ja paneme jrk ette
 
-        children = problem.expand(node)  # children on list tyypi; [ node1, node2, .... ]
-        fringe.add_front(random.choice(children))  # valime yhe ja paneme jrk ette
-
-        # Deal with statistics here
-        stat.increment_node_count()
-        stat.increment_node_depth(node.depth)
-        stat.increment_node_children_count(len(children))
+            # Deal with statistics here
+            stat.increment_node_count()
+            stat.increment_node_depth(node.depth)
+            stat.increment_node_children_count(len(children))
 
 
-p = SearchProblem(KASPAR_CODE)
+    def god_damn_search(problem, stat):
+        fringe = lab2.Fringe()
+        fringe.add_front(problem.start_node())
+        visited = set()
+        visited.add(problem.start_node())
+
+        while 1:  # lõputu tsükkel
+            # Solution missing for the maze
+            if fringe.is_empty():
+                return None
+            node = fringe.remove_front()
+
+            # Solution found
+            if problem.is_goal(node):
+                return node
+
+        #    route = lab2.h1(p, node);
+
+
+            children = problem.expand(node) # children on list tyypi; [ node1, node2, .... ]
+            for child in children:
+                if child not in visited:
+                    fringe.add_end(child)  # valime yhe ja paneme jrk ette
+                    visited.add(child)
+
+            # Deal with statistics here
+            stat.increment_node_count()
+            stat.increment_node_depth(node.depth)
+            stat.increment_node_children_count(len(children))
+
+
+
+
+p = lab2.SearchProblem(MARTIN_CODE)
+# p = SearchProblem(KASPAR_CODE)
+initial_state = p.start_node()
 stat = Statistics()
-res = silly_search(p, stat)
+stat2 = Statistics()
+#res = Search.silly_search(p, stat)
+res = Search.god_damn_search(p, stat)
 print("\nLahendamata labürint")
 p.dump()
 if res is None:
