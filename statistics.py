@@ -6,6 +6,7 @@ class Statistics:
         self.node_count = 0
         self.node_depth = 0
         self.node_children = {}
+        self.node_que = 0
 
     # ================== NODE TOTAL COUNT ==================
     def increment_node_count(self):
@@ -32,3 +33,11 @@ class Statistics:
 
     def get_max_depth(self):
         return self.node_depth
+
+    # ================== Max que length ==================
+    def increment_node_que(self, que):
+        if que > self.node_que:
+            self.node_que = que
+
+    def get_max_que(self):
+        return self.node_que

@@ -1,8 +1,8 @@
 __author__ = 'Martin, Kaspar'
 
 import random
-import lab2
 
+import lab2
 from statistics import Statistics
 
 KASPAR_CODE = 131333
@@ -26,6 +26,7 @@ class Search():
                 return node
 
             children = problem.expand(node)  # children on list tyypi; [ node1, node2, .... ]
+            stat.increment_node_que(len(children))
             fringe.add_front(random.choice(children))  # valime yhe ja paneme jrk ette
 
             # Deal with statistics here
@@ -51,6 +52,7 @@ class Search():
                 return node
 
             children = problem.expand(node) # children on list tyypi; [ node1, node2, .... ]
+            stat.increment_node_que(len(children))
             for child in children:
                 # Deal with statistics here
                 stat.increment_node_count()
@@ -83,7 +85,7 @@ else:
     p.print_solution(res)
     print("Läbitud tippe " + str(stat.get_node_count()))
     print("Hargnemistegur: ", stat.get_avg_node_children_count())
-    print("Maksimaalne järjekorra pikkus: valmimisel")
+    print("Maksimaalne järjekorra pikkus: ", stat.get_max_que())
     print("Puu maksimaalne sügavus: ", stat.get_max_depth())
 
     if res2 is not None:
@@ -92,5 +94,5 @@ else:
         p.print_solution(res2)
         print("Läbitud tippe " + str(stat2.get_node_count()))
         print("Hargnemistegur: ", stat2.get_avg_node_children_count())
-        print("Maksimaalne järjekorra pikkus: valmimisel")
+        print("Maksimaalne järjekorra pikkus: ", stat2.get_max_que())
         print("Puu maksimaalne sügavus: ", stat2.get_max_depth())
