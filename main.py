@@ -64,15 +64,8 @@ class Search():
             stat.increment_node_children_count(len(children))
             stat.increment_node_depth(node.depth)
 
-    def a_multiplication(problem, stat, end):
-        # lol = Otsi()
-
+    def a_multiplication(problem, stat):
         fringe = lab2.Fringe()
-        fringe.add_front(problem.start_node())
-        visited = set()
-        visited.add(problem.start_node())
-
-        nodes_to_visit = set()
 
         start_node = problem.start_node()
         fringe.add_by_priority(start_node, 0)
@@ -92,8 +85,9 @@ class Search():
 
             for next in children:
                 stat.increment_node_count()
-
-                new_cost = cost_so_far[current] + next.path_cost() - current.path_cost()
+                # print(next.path_cost())
+                # print(current.path_cost())
+                new_cost = cost_so_far[current] + current.path_cost() - next.path_cost()
                 if next not in cost_so_far or new_cost < cost_so_far[next]:
                     cost_so_far[next] = new_cost
                     # fringe.add_by_priority(next, )
@@ -118,7 +112,7 @@ stat2 = Statistics()
 stat3 = Statistics()
 res = Search.silly_search(p, stat)
 res2 = Search.god_damn_search(p, stat2)
-res3 = Search.a_multiplication(p, stat3, res2)
+res3 = Search.a_multiplication(p, stat3)
 
 print("\nLahendamata labürint")
 p.dump()
