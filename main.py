@@ -11,6 +11,7 @@ class Search():
     def __init__(self):
         rec_node = None
 
+    #################### A* ###################################
     def A_STAR(problem, stat):
         fringe = lab2.Fringe()
 
@@ -33,11 +34,36 @@ class Search():
 
             for child in children:
                 new_cost = closed_list[node] + lab2.h1(problem, node)
+                new_cost2 = node.path_cost() + lab2.h1(problem, node)
 
                 if new_cost < closed_list.get(child, float("inf")):
                     closed_list[child] = new_cost
                     priority = new_cost + lab2.h1(problem, child)
                     fringe.add_by_priority(child, priority)
+
+    ################## GREEDY ###############################
+    def GREEDY(problem, stat):
+        fringe = lab2.Fringe()
+        start_node = problem.start_node()
+        fringe.add_by_priority(start_node, 0)
+
+        while not fringe.is_empty():
+            stat.increment_node_que(len(fringe))
+            node = fringe.remove_front()
+            stat.increment_node_depth(node.depth)
+            stat.increment_node_count()
+            if problem.is_goal(node):
+                return node
+
+            children = problem.expand(node)
+            for child in children:
+                new_cost = node.path_cost() + lab2.h1(problem, node)
+                if child.path_cost() < new_cost:
+                    fringe.add_by_priority(child, new_cost)
+
+
+
+
 
     def BFS(problem, stat):
         fringe = lab2.Fringe()
@@ -106,12 +132,13 @@ stat3 = Statistics()
 stat4 = Statistics()
 res1 = Search.A_STAR(p, stat1)
 res2 = Search.BFS(p, stat2)
-res3 = Search.DFS(p, p.start_node(), stat2)
+res3 = Search.DFS(p, p.start_node(), stat3)
+# res4 = Search.GREEDY(p, stat4)
 
 
 
-print("\nLahendamata labürint")
-p.dump()
+# print("\nLahendamata labürint")
+#p.dump()
 if res1 is None:
     print("Not found")
 else:
