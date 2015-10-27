@@ -89,9 +89,16 @@ class Search():
                     visited[child] = True
 
     ####################### DFS SEARCH 3 SOLUTIONS ########################################### FRINGE!!!!
-    def DFS(problem, node, stat, visited=None):
+    def DFS(problem, node, stat, visited=set()):
         # Otsingu täiustused punkt 3
         if problem.is_goal(node):
+            print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
+            p.print_path(node)
+            p.print_solution(node)
+            print("Läbitud tippe " + str(stat.get_node_count()))
+            print("Hargnemistegur: ", stat.get_avg_node_children_count())
+            print("Maksimaalne järjekorra pikkus: ", stat.get_max_que())
+            print("Puu maksimaalne sügavus: ", stat.get_max_depth())
             return node
 
         if visited is None:
@@ -132,7 +139,8 @@ stat3 = Statistics()
 stat4 = Statistics()
 res1 = Search.A_STAR(p, stat1)
 res2 = Search.BFS(p, stat2)
-res3 = Search.DFS(p, p.start_node(), stat3)
+
+Search.DFS(p, p.start_node(), stat3)
 # res4 = Search.GREEDY(p, stat4)
 
 
@@ -159,11 +167,11 @@ else:
         print("Maksimaalne järjekorra pikkus: ", stat2.get_max_que())
         print("Puu maksimaalne sügavus: ", stat2.get_max_depth())
 
-    if res3 is not None:
-        print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
-        p.print_path(res3)
-        p.print_solution(res3)
-        print("Läbitud tippe " + str(stat3.get_node_count()))
-        print("Hargnemistegur: ", stat3.get_avg_node_children_count())
-        print("Maksimaalne järjekorra pikkus: ", stat3.get_max_que())
-        print("Puu maksimaalne sügavus: ", stat3.get_max_depth())
+        # if res4 is not None:
+        #   print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
+        #  p.print_path(v1)
+        # p.print_solution(v1)
+        # print("Läbitud tippe " + str(stat3.get_node_count()))
+        # print("Hargnemistegur: ", stat3.get_avg_node_children_count())
+        # print("Maksimaalne järjekorra pikkus: ", stat3.get_max_que())
+        # print("Puu maksimaalne sügavus: ", stat3.get_max_depth())
