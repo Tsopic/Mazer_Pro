@@ -8,6 +8,9 @@ MARTIN_CODE = 131316
 STEN_CODE = 111
 
 class Search():
+    def __init__(self):
+        rec_node = None
+
     def A_STAR(problem, stat):
         fringe = lab2.Fringe()
 
@@ -59,6 +62,28 @@ class Search():
                     fringe.add_front(child)
                     visited[child] = True
 
+    def DFS(problem, stat):
+        start_node = problem.start_node()
+        node = Search.DFS_r2(problem, start_node, stat)
+
+        return node
+
+    def DFS_r2(problem, node, stat, visited=None):
+        if problem.is_goal(node):
+            return node
+
+        if visited is None:
+            visited = set()
+
+        visited.add(node)
+
+        for child in problem.expand(node):
+            if child not in visited:
+                if Search.DFS_r2(problem, child, stat, visited):
+                    return node
+
+        return node
+
 
 # p = lab2.SearchProblem(MARTIN_CODE)
 p = lab2.SearchProblem(KASPAR_CODE)
@@ -69,6 +94,7 @@ stat3 = Statistics()
 stat4 = Statistics()
 res1 = Search.A_STAR(p, stat1)
 res2 = Search.BFS(p, stat2)
+res3 = Search.DFS(p, stat2)
 
 print("\nLahendamata labürint")
 p.dump()
@@ -91,3 +117,8 @@ else:
         print("Hargnemistegur: ", stat2.get_avg_node_children_count())
         print("Maksimaalne järjekorra pikkus: ", stat2.get_max_que())
         print("Puu maksimaalne sügavus: ", stat2.get_max_depth())
+
+    if res3 is not None:
+        print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
+        p.print_path(res3)
+        p.print_solution(res3)
