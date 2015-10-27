@@ -85,9 +85,7 @@ class Search():
 
             for next in children:
                 stat.increment_node_count()
-                # print(next.path_cost())
-                # print(current.path_cost())
-                new_cost = cost_so_far[current] + current.path_cost() - next.path_cost()
+                new_cost = cost_so_far[current] + lab2.h1(problem, current)
                 if next not in cost_so_far or new_cost < cost_so_far[next]:
                     cost_so_far[next] = new_cost
                     # fringe.add_by_priority(next, )
@@ -102,10 +100,8 @@ class Search():
         return came_from, cost_so_far
 
 
-
-
-p = lab2.SearchProblem(MARTIN_CODE)
-# p = SearchProblem(KASPAR_CODE)
+# p = lab2.SearchProblem(MARTIN_CODE)
+p = lab2.SearchProblem(KASPAR_CODE)
 initial_state = p.start_node()
 stat = Statistics()
 stat2 = Statistics()
