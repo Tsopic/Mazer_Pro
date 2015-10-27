@@ -62,13 +62,7 @@ class Search():
                     fringe.add_front(child)
                     visited[child] = True
 
-    def DFS(problem, stat):
-        start_node = problem.start_node()
-        node = Search.DFS_r2(problem, start_node, stat)
-
-        return node
-
-    def DFS_r2(problem, node, stat, visited=None):
+    def DFS(problem, node, stat, visited=None):
         if problem.is_goal(node):
             return node
 
@@ -79,10 +73,7 @@ class Search():
 
         for child in problem.expand(node):
             if child not in visited:
-                if Search.DFS_r2(problem, child, stat, visited):
-                    return node
-
-        return node
+                Search.DFS(problem, child, stat, visited)
 
 
 # p = lab2.SearchProblem(MARTIN_CODE)
@@ -94,7 +85,9 @@ stat3 = Statistics()
 stat4 = Statistics()
 res1 = Search.A_STAR(p, stat1)
 res2 = Search.BFS(p, stat2)
-res3 = Search.DFS(p, stat2)
+res3 = Search.DFS(p, p.start_node(), stat2)
+
+
 
 print("\nLahendamata labürint")
 p.dump()
