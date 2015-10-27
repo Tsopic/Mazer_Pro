@@ -42,6 +42,8 @@ class Search():
                     fringe.add_by_priority(child, priority)
 
     ################## GREEDY ###############################
+
+    # 1 punkt, blind search
     def GREEDY(problem, stat):
         fringe = lab2.Fringe()
         start_node = problem.start_node()
@@ -61,9 +63,7 @@ class Search():
                 if child.path_cost() < new_cost:
                     fringe.add_by_priority(child, new_cost)
 
-
-
-
+    ############## BFS #########################
 
     def BFS(problem, stat):
         fringe = lab2.Fringe()
