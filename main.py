@@ -64,41 +64,34 @@ class Search():
             stat.increment_node_children_count(len(children))
             stat.increment_node_depth(node.depth)
 
-    def a_multiplication(problem, stat):
+    def a_star(problem, stat):
         fringe = lab2.Fringe()
 
         start_node = problem.start_node()
         fringe.add_by_priority(start_node, 0)
-        came_from = {}
-        cost_so_far = {}
-        came_from[start_node] = None
-        cost_so_far[start_node] = 0
+        closed_list = {}
+        closed_list[start_node] = 0
 
         while not fringe.is_empty():
-            current = fringe.remove_front()
+            stat.increment_node_que(len(fringe))
+            node = fringe.remove_front()
+            stat.increment_node_depth(node.depth)
+            stat.increment_node_count()
 
-            if problem.is_goal(current):
-                return current
+            if problem.is_goal(node):
+                return node
 
-            children = problem.expand(current)
-            stat.increment_node_que(len(children))
-
-            for next in children:
-                stat.increment_node_count()
-                new_cost = cost_so_far[current] + lab2.h1(problem, current)
-                if next not in cost_so_far or new_cost < cost_so_far[next]:
-                    cost_so_far[next] = new_cost
-                    # fringe.add_by_priority(next, )
-                    priority = new_cost + lab2.h1(problem, next)
-                    fringe.add_by_priority(next, priority)
-                    came_from[next] = current
-
-            ### STATS ###
+            children = problem.expand(node)
             stat.increment_node_children_count(len(children))
-            stat.increment_node_depth(current.depth)
 
-        return came_from, cost_so_far
+            for child in children:
 
+                new_cost = closed_list[node] + lab2.h1(problem, node)
+
+                if new_cost < closed_list.get(child, float("inf")):
+                    closed_list[child] = new_cost
+                    priority = new_cost + lab2.h1(problem, child)
+                    fringe.add_by_priority(child, priority)
 
 # p = lab2.SearchProblem(MARTIN_CODE)
 p = lab2.SearchProblem(KASPAR_CODE)
@@ -108,7 +101,7 @@ stat2 = Statistics()
 stat3 = Statistics()
 res = Search.silly_search(p, stat)
 res2 = Search.god_damn_search(p, stat2)
-res3 = Search.a_multiplication(p, stat3)
+res3 = Search.a_star(p, stat3)
 
 print("\nLahendamata labürint")
 p.dump()
