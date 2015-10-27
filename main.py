@@ -62,18 +62,39 @@ class Search():
                     fringe.add_front(child)
                     visited[child] = True
 
+    ####################### DFS SEARCH 3 SOLUTIONS ########################################### FRINGE!!!!
     def DFS(problem, node, stat, visited=None):
+        # Otsingu täiustused punkt 3
         if problem.is_goal(node):
             return node
 
         if visited is None:
             visited = set()
 
-        visited.add(node)
+        stat.increment_node_que(len(visited))
+        stat.increment_node_depth(node.depth)
+        stat.increment_node_count()
 
-        for child in problem.expand(node):
+        visited.add(node)
+        children = problem.expand(node)
+        stat.increment_node_children_count(len(children))
+        for child in children:
             if child not in visited:
                 Search.DFS(problem, child, stat, visited)
+
+    def DFS1(problem, node, stat):
+        # Otsingu täiustused punkt 1
+        if problem.is_goal(node):
+            return node
+
+        stat.increment_node_que(1)
+        stat.increment_node_depth(node.depth)
+        stat.increment_node_count()
+
+        children = problem.expand(node)
+        stat.increment_node_children_count(len(children))
+        for child in children:
+            Search.DFS(problem, child, stat)
 
 
 # p = lab2.SearchProblem(MARTIN_CODE)
@@ -115,3 +136,7 @@ else:
         print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
         p.print_path(res3)
         p.print_solution(res3)
+        print("Läbitud tippe " + str(stat3.get_node_count()))
+        print("Hargnemistegur: ", stat3.get_avg_node_children_count())
+        print("Maksimaalne järjekorra pikkus: ", stat3.get_max_que())
+        print("Puu maksimaalne sügavus: ", stat3.get_max_depth())
