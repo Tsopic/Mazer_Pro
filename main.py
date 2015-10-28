@@ -91,7 +91,7 @@ class Search():
             stat.increment_node_children_count(len(children))
             for child in children:
                 if child not in visited:
-                    fringe.add_front(child)
+                    fringe.add_end(child)
                     visited[child] = True
 
     ####################### DFS SEARCH 3 SOLUTIONS ########################################### FRINGE!!!!
