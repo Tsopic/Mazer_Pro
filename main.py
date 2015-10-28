@@ -67,6 +67,7 @@ class Search():
                 if child.path_cost() < new_cost and child not in visited:
                     fringe.add_by_priority(child, new_cost)
                     visited.add(child)
+        return node
 
     ############## BFS #########################
 
@@ -191,7 +192,7 @@ res2 = Search.BFS(p, stat2)
 
 FUCKEN_TIME = 0
 
-Search.DFS1(p, p.start_node(), stat3)
+# Search.DFS1(p, p.start_node(), stat3)
 res4 = Search.GREEDY(p, stat4)
 # print(p.print_solution(res4))
 
@@ -219,8 +220,8 @@ else:
         print("Puu maksimaalne sügavus: ", stat2.get_max_depth())
 
         print("\nLahendatud labürint 4 - Greedy meetodil")
-        # p.print_path(res4)
-        # p.print_solution(res4)
+        p.print_path(res4)
+        p.print_solution(res4)
         print("Läbitud tippe " + str(stat4.get_node_count()))
         print("Hargnemistegur: ", stat4.get_avg_node_children_count())
         print("Maksimaalne järjekorra pikkus: ", stat4.get_max_que())
