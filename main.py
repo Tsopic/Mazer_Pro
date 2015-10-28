@@ -3,6 +3,7 @@ __author__ = 'Martin, Kaspar'
 import lab2
 from statistics import Statistics
 
+
 KASPAR_CODE = 131333
 MARTIN_CODE = 131316
 STEN_CODE = 111
@@ -48,6 +49,8 @@ class Search():
         fringe = lab2.Fringe()
         start_node = problem.start_node()
         fringe.add_by_priority(start_node, 0)
+        visited = set()
+        visited.add(start_node)
 
         while not fringe.is_empty():
             stat.increment_node_que(len(fringe))
@@ -58,10 +61,12 @@ class Search():
                 return node
 
             children = problem.expand(node)
+            stat.increment_node_children_count(len(children))
             for child in children:
                 new_cost = node.path_cost() + lab2.h1(problem, node)
-                if child.path_cost() < new_cost:
+                if child.path_cost() < new_cost and child not in visited:
                     fringe.add_by_priority(child, new_cost)
+                    visited.add(child)
 
     ############## BFS #########################
 
@@ -89,8 +94,9 @@ class Search():
                     visited[child] = True
 
     ####################### DFS SEARCH 3 SOLUTIONS ########################################### FRINGE!!!!
+
+    # Otsingu täiustused punkt 3
     def DFS(problem, node, stat, visited=set()):
-        # Otsingu täiustused punkt 3
         if problem.is_goal(node):
             print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
             p.print_path(node)
@@ -101,12 +107,14 @@ class Search():
             print("Puu maksimaalne sügavus: ", stat.get_max_depth())
             return node
 
+        stat.increment_node_depth(node.depth)
+        stat.increment_node_count()
+
         if visited is None:
             visited = set()
 
         stat.increment_node_que(len(visited))
-        stat.increment_node_depth(node.depth)
-        stat.increment_node_count()
+
 
         visited.add(node)
         children = problem.expand(node)
@@ -115,8 +123,37 @@ class Search():
             if child not in visited:
                 Search.DFS(problem, child, stat, visited)
 
-    def DFS1(problem, node, stat):
-        # Otsingu täiustused punkt 1
+    # Otsingu täiustused punkt 1
+    def DFS1(problem, node, stat, FUCKEN_TIME=0):
+        if problem.is_goal(node):
+            print("\nDFS 1")
+            p.print_path(node)
+            p.print_solution(node)
+            print("Läbitud tippe " + str(stat.get_node_count()))
+            print("Hargnemistegur: ", stat.get_avg_node_children_count())
+            print("Maksimaalne järjekorra pikkus: ", stat.get_max_que())
+            print("Puu maksimaalne sügavus: ", stat.get_max_depth())
+            return node
+
+        stat.increment_node_que(1)
+        stat.increment_node_depth(node.depth)
+        stat.increment_node_count()
+        FUCKEN_TIME = FUCKEN_TIME + 1
+        children = problem.expand(node)
+        stat.increment_node_children_count(len(children))
+        for child in children:
+            if FUCKEN_TIME == 100:
+                p.print_path(node)
+                p.print_solution(node)
+                print("Läbitud tippe " + str(stat.get_node_count()))
+                print("Hargnemistegur: ", stat.get_avg_node_children_count())
+                print("Maksimaalne järjekorra pikkus: ", stat.get_max_que())
+                print("Puu maksimaalne sügavus: ", stat.get_max_depth())
+                return node
+            else:
+                Search.DFS1(problem, child, stat, FUCKEN_TIME)
+
+    def DFS2(problem, node, stat, FUCKEN_TIME=0):
         if problem.is_goal(node):
             return node
 
@@ -127,7 +164,19 @@ class Search():
         children = problem.expand(node)
         stat.increment_node_children_count(len(children))
         for child in children:
-            Search.DFS(problem, child, stat)
+            if not lab2.in_path(node, child):
+                FUCKEN_TIME = FUCKEN_TIME + 1
+                if FUCKEN_TIME == 100:
+                    print("\nDFS 2")
+                    p.print_path(node)
+                    p.print_solution(node)
+                    print("Läbitud tippe " + str(stat.get_node_count()))
+                    print("Hargnemistegur: ", stat.get_avg_node_children_count())
+                    print("Maksimaalne järjekorra pikkus: ", stat.get_max_que())
+                    print("Puu maksimaalne sügavus: ", stat.get_max_depth())
+                    return node
+                else:
+                    Search.DFS2(problem, child, stat, FUCKEN_TIME)
 
 
 # p = lab2.SearchProblem(MARTIN_CODE)
@@ -140,9 +189,11 @@ stat4 = Statistics()
 res1 = Search.A_STAR(p, stat1)
 res2 = Search.BFS(p, stat2)
 
-Search.DFS(p, p.start_node(), stat3)
-# res4 = Search.GREEDY(p, stat4)
+FUCKEN_TIME = 0
 
+Search.DFS1(p, p.start_node(), stat3)
+res4 = Search.GREEDY(p, stat4)
+# print(p.print_solution(res4))
 
 
 # print("\nLahendamata labürint")
@@ -158,7 +209,7 @@ else:
     print("Maksimaalne järjekorra pikkus: ", stat1.get_max_que())
     print("Puu maksimaalne sügavus: ", stat1.get_max_depth())
 
-    if res2 is not None:
+    if 1:
         print("\nLahendatud labürint 2 - BFS meetodil(Laiuti otsing)")
         p.print_path(res2)
         p.print_solution(res2)
@@ -167,11 +218,10 @@ else:
         print("Maksimaalne järjekorra pikkus: ", stat2.get_max_que())
         print("Puu maksimaalne sügavus: ", stat2.get_max_depth())
 
-        # if res4 is not None:
-        #   print("\nLahendatud labürint 3 - DFS meetodil(Sügavuti otsing)")
-        #  p.print_path(v1)
-        # p.print_solution(v1)
-        # print("Läbitud tippe " + str(stat3.get_node_count()))
-        # print("Hargnemistegur: ", stat3.get_avg_node_children_count())
-        # print("Maksimaalne järjekorra pikkus: ", stat3.get_max_que())
-        # print("Puu maksimaalne sügavus: ", stat3.get_max_depth())
+        print("\nLahendatud labürint 4 - Greedy meetodil")
+        # p.print_path(res4)
+        # p.print_solution(res4)
+        print("Läbitud tippe " + str(stat4.get_node_count()))
+        print("Hargnemistegur: ", stat4.get_avg_node_children_count())
+        print("Maksimaalne järjekorra pikkus: ", stat4.get_max_que())
+        print("Puu maksimaalne sügavus: ", stat4.get_max_depth())
